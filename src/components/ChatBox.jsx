@@ -1,45 +1,64 @@
 import React, { useState, useEffect, useRef } from "react";
-import { io } from "socket.io-client";
+// import { io } from "socket.io-client";
 // import axios from 'axios';
 
-const socket = io("http://127.0.0.1:5001");
+// const socket = io("http://127.0.0.1:5001");
 const ChatBox = ({ text }) => {
   const [messages, setMessages] = useState([]);
-  const [streamedText, setStreamedText] = useState("");
-  const streambool = useRef(false);
+  // const [streamedText, setStreamedText] = useState("");
+  // const streambool = useRef(false);
+
+    useEffect(() => {
+      console.log("Updated messages:", messages);
+    }, [messages]);
+
+  // useEffect(() => {
+  //   socket.on("stream_complete", () => {
+  //     if(streamedText){
+  //       console.log("check here: ",streamedText)
+  //     setMessages((prev) => [...prev, { sender: "bot", text: streamedText }]);}
+  //     streambool.current = false;
+  //     setStreamedText("");
+  //   });
+
+  //   socket.on("data", (data) => {
+  //     streambool.current = true;
+  //     setStreamedText((prev) => prev + data.char);
+  //   });
+
+  //   return () => {
+  //     socket.off("stream_complete");
+  //     socket.off("data");
+  //   };
+  // }, [streamedText]);
+
+  // useEffect(() => {
+  //   if (text != "") {
+  //     streambool.current = false;
+  //     setStreamedText("");
+  //     setMessages((prev) => [...prev, { sender: "user", text: text }]);
+  //     // socket.emit("data", { question: text });
+  //     fetch("http://127.0.0.1:5001/api/query", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({
+  //         query: text
+  //       }),
+  //     })
+  //       .then((res) => res.json())
+  //       .then((data) => console.log("Model updated on backend:", data))
+  //       .catch((err) => console.error("Error updating model:", err));
+
+  //   }
+  // }, [text]);
 
   useEffect(() => {
-    console.log("Updated messages:", messages);
-  }, [messages]);
-
-  useEffect(() => {
-    socket.on("stream_complete", () => {
-      if(streamedText){
-        console.log("check here: ",streamedText)
-      setMessages((prev) => [...prev, { sender: "bot", text: streamedText }]);}
-      streambool.current = false;
-      setStreamedText("");
-    });
-
-
-    socket.on("data", (data) => {
-      streambool.current = true;
-      setStreamedText((prev) => prev + data.char);
-    });
-
-    return () => {
-      socket.off("stream_complete");
-      socket.off("data");
-    };
-  }, [streamedText]);
-
-  useEffect(() => {
-    if (text != "") {
-      streambool.current = false;
-      setStreamedText("");
+    if (text !== "") {
       setMessages((prev) => [...prev, { sender: "user", text: text }]);
-      // socket.emit("data", { question: text });
-      fetch("http://127.0.0.1:5001/api/query", {
+  
+      fetch("https://multi-agent-backend-y0ty.onrender.com/api/query", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -49,29 +68,40 @@ const ChatBox = ({ text }) => {
         }),
       })
         .then((res) => res.json())
-        .then((data) => console.log("Model updated on backend:", data))
-        .catch((err) => console.error("Error updating model:", err));
-
+        .then((data) => {
+          console.log("Model updated on backend:", data);
+          
+          // Check if the response contains a valid message
+          if (data.response) {
+            setMessages((prev) => [...prev, { sender: "bot", text: data.response }]);
+          } else {
+            setMessages((prev) => [...prev, { sender: "bot", text: "No response received." }]);
+          }
+        })
+        .catch((err) => {
+          console.error("Error updating model:", err);
+          setMessages((prev) => [...prev, { sender: "bot", text: "Error processing query." }]);
+        });
+  
     }
-  }, [text]);
+  }, [text]);  
 
   const handleBeforeUnload = () => {
-    // socket.emit('refresh'); // Notify the backend on page refresh
-    fetch('http://127.0.0.1:5001/api/refresh', {
-      method: 'POST',  // Use GET or POST depending on your backend
+    fetch("https://multi-agent-backend-y0ty.onrender.com/api/refresh", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify({ message: 'Page is being refreshed' }),
+      body: JSON.stringify({ message: "Page is being refreshed" }),
       keepalive: true, // Ensures the request is sent even if the page is closing
     });
   };
 
   useEffect(() => {
-    window.addEventListener('beforeunload', handleBeforeUnload);
+    window.addEventListener("beforeunload", handleBeforeUnload);
 
     return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
+      window.removeEventListener("beforeunload", handleBeforeUnload);
     };
   }, []);
 
@@ -95,13 +125,14 @@ const ChatBox = ({ text }) => {
           </div>
         </div>
       ))}
-      {streambool.current && streamedText && (
+      {/* {
+      streambool.current && streamedText && (
         <div className="flex justify-start">
           <div className="max-w-[75%] px-4 py-2 rounded-lg bg-gray-700 text-gray-200">
             {streamedText}
           </div>
         </div>
-      )}
+      )} */}
     </div>
   );
 };

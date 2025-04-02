@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import ChatInput from "./components/ChatInput";
 import ChatBox from "./components/ChatBox";
-import { SidebarWithSearch } from "./components/slidebar";
+// import { SidebarWithSearch } from "./components/slidebar";
 
 const App = () => {
   const [text, setText] = useState("");
@@ -14,9 +14,9 @@ const App = () => {
   return (
     <div className="h-screen flex flex-col bg-gray-400 text-white">
       <div className="flex">
-        <div className="">
+        {/* <div className="">
           <SidebarWithSearch></SidebarWithSearch>
-        </div>
+        </div> */}
         <div className="w-full flex flex-col">
           <header className="bg-gray-200 p-4 text-center text-xl font-bold text-gray-700">
             T-GPT
