@@ -18,7 +18,7 @@ const App = () => {
           <SidebarWithSearch></SidebarWithSearch>
         </div> */}
         {/* <div className="w-full flex flex-col"> */}
-          <header className="bg-gray-200 p-4 text-center text-xl font-bold text-gray-700">
+          <header className="fixed bg-gray-200 p-4 text-center text-xl font-bold text-gray-700">
             T-GPT
           </header>
           <ChatBox className="row-start-1" text={text} />
