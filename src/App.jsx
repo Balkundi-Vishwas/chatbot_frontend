@@ -22,7 +22,7 @@ const App = () => {
             T-GPT
           </header>
           <ChatBox className="row-start-1" text={text} />
-          <ChatInput className="mt-auto row-end-1" onSend={handleSend} />
+          <ChatInput className="row-end-1" onSend={handleSend} />
         {/* </div> */}
       </div>
     // </div>
