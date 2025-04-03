@@ -12,13 +12,13 @@ const App = () => {
   };
 
   return (
-    <div className="w-full h-screen flex flex-col bg-gray-400 text-white">
+    <div className="w-full h-screen flex flex-col bg-gray-400 text-white overflow-hidden">
       {/* <div className="flex"> */}
         {/* <div className="">
           <SidebarWithSearch></SidebarWithSearch>
         </div> */}
         {/* <div className="w-full flex flex-col"> */}
-          <header className="fixed bg-gray-200 p-4 text-center text-xl font-bold text-gray-700">
+          <header className="bg-gray-200 p-4 text-center text-xl font-bold text-gray-700">
             T-GPT
           </header>
           <ChatBox className="row-start-1" text={text} />

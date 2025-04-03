@@ -11,7 +11,7 @@ const ChatInput = ({ onSend }) => {
   };
 
   return (
-    <div className="fixed  bottom-0 left-0 w-full p-4 flex items-center bg-gray-200">
+    <div className="fixed bottom-0 left-0 w-full p-4 flex items-center bg-gray-200">
       <input
         type="text"
         value={input}

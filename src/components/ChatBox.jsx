@@ -58,7 +58,7 @@ const ChatBox = ({ text }) => {
     if (text !== "") {
       setMessages((prev) => [...prev, { sender: "user", text: text }]);
   
-      fetch("https://multi-agent-backend-y0ty.onrender.com/api/query", {
+      fetch(`${import.meta.env.VITE_API_URL}/api/query`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -87,7 +87,7 @@ const ChatBox = ({ text }) => {
   }, [text]);  
 
   const handleBeforeUnload = () => {
-    fetch("https://multi-agent-backend-y0ty.onrender.com/api/refresh", {
+    fetch(`${import.meta.env.VITE_API_URL}/api/refresh`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
